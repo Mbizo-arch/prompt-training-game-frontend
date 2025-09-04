@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Trainer - AI Prompt Practice Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Prompt Trainer</h1>
+            <p class="description">Practice creating effective AI prompts and get instant feedback on your skills!</p>
+        </header>
+        
+        <div class="input-group">
+            <label for="challenge">Challenge Type:</label>
+            <select id="challenge">
+                <option value="explanation">Explanation Challenge</option>
+                <option value="creative">Creative Writing Challenge</option>
+                <option value="technical">Technical Description Challenge</option>
+                <option value="persuasion">Persuasion Challenge</option>
+                <option value="summary">Summary Challenge</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="prompt">Your Prompt:</label>
+            <textarea id="prompt" placeholder="Type your AI prompt here..."></textarea>
+        </div>
+        
+        <button id="evaluate-btn">Evaluate Prompt</button>
+        
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Analyzing your prompt...</p>
+        </div>
+        
+        <div class="error-message" id="error-message">
+            <p>Unable to connect to the evaluation service. Using simulated feedback.</p>
+        </div>
+        
+        <div class="result-container" id="result-container">
+            <div class="score-circle" id="score-circle">0</div>
+            
+            <div class="feedback-section">
+                <h3>Feedback</h3>
+                <p id="feedback-text">Your feedback will appear here.</p>
+            </div>
+            
+            <div class="feedback-section strengths">
+                <h3>Strengths</h3>
+                <ul id="strengths-list"></ul>
+            </div>
+            
+            <div class="feedback-section weaknesses">
+                <h3>Areas for Improvement</h3>
+                <ul id="weaknesses-list"></ul>
+            </div>
+            
+            <div class="feedback-section">
+                <h3>Suggestions</h3>
+                <p id="suggestions-text"></p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Prompt Trainer - Master the art of AI communication</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
