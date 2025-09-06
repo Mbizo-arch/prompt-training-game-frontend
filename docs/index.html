@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Prompt Training Game</h1>
+    
+    <div class="score-board">
+      <div class="score-item">
+        <div class="score-label">Score</div>
+        <div class="score-value" id="score">0</div>
+        <div id="score-change"></div>
+      </div>
+      
+      <div class="score-item">
+        <div class="score-label">Prompts</div>
+        <div class="score-value" id="prompts-count">0</div>
+      </div>
+      
+      <div class="score-item">
+        <div class="score-label">Avg. Quality</div>
+        <div class="score-value" id="accuracy">0%</div>
+      </div>
+    </div>
+
+    <div class="box" id="promptBox">
+      <strong>Prompt Challenge:</strong> 
+      <div id="challengeText">Write a prompt that asks the AI to summarize a news article.</div>
+    </div>
+
+    <div class="box">
+      <textarea id="userInput" placeholder="Write your prompt here..."></textarea>
+      
+      <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <p>Analyzing your prompt with AI...</p>
+      </div>
+      
+      <div class="error-message" id="error-message">
+        <p>Unable to connect to the evaluation service. Using simulated feedback.</p>
+      </div>
+      
+      <div class="buttons">
+        <button id="submit-btn">Submit</button>
+        <button id="next-btn" disabled>Next</button>
+      </div>
+    </div>
+
+    <div class="box" id="feedbackBox">
+      <strong>AI Feedback:</strong>
+      <div id="aiFeedback"></div>
+      <div id="examplePrompt" class="example-prompt" style="display: none;"></div>
+    </div>
+    
+    <!-- Accordion Tips Section -->
+    <details id="tips-section">
+      <summary> 
+        <span>💡 Prompting Tips (Costs 10 points to view before submitting)</span> 
+        <b></b>
+      </summary>
+      <div class="answer">
+        <p><strong>Be specific</strong> about what you want from the AI. Vague prompts get vague results.</p>
+        <p><strong>Provide context</strong> when necessary. The AI doesn't know your specific situation unless you tell it.</p>
+        <p><strong>Use clear instructions</strong> and examples. Show the AI exactly what you're looking for.</p>
+        <p><strong>Specify the format</strong> you want the response in (paragraph, list, table, etc.).</p>
+        <p><strong>Break complex tasks</strong> into smaller steps for better results.</p>
+        <p><strong>Use polite language</strong> like "please" and "thank you" - it often improves response quality.</p>
+        <div class="penalty-warning">⚠️ You lost 10 points for viewing these tips before submitting!</div>
+      </div>
+    </details>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
