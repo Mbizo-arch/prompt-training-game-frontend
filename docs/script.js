@@ -56,7 +56,8 @@ const tipsSection = document.getElementById('tips-section');
 const scoreChangeEl = document.getElementById('score-change');
 const loadingEl = document.getElementById('loading');
 const errorMessageEl = document.getElementById('error-message');
-
+const copyBtn = document.getElementById('copy-btn');
+const sharingButtonsEl = document.getElementById('sharing-buttons');
 // Initialize the game
 function initGame() {
   // Load saved game state if available
@@ -66,6 +67,7 @@ function initGame() {
   nextChallenge();
   
   // Add event listeners
+  copyBtn.addEventListener('click', copyPromptToClipboard);
   submitBtn.addEventListener('click', submitPrompt);
   nextBtn.addEventListener('click', nextChallenge);
   tipsSection.addEventListener('toggle', handleTipsOpen);
@@ -167,7 +169,43 @@ function nextChallenge() {
   tipsOpenedThisChallenge = false;
   tipsSection.classList.remove('penalty-applied');
 }
+// this is a functions for copy functionality
+function copyPromptToClipboard() {
+  const promptText = userInputEl.value;
+  if (!promptText) {
+    alert('Please write a prompt before copying.');
+    return;
+  }
+  
+  navigator.clipboard.writeText(promptText).then(() => {
+    // Show success feedback
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = '✅ Copied!';
+    copyBtn.style.background = '#4caf50';
+    
+    // Revert after 2 seconds
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+      copyBtn.style.background = '#a777e3';
+    }, 2000);
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+    alert('Failed to copy to clipboard. Please try again.');
+  });
+}
 
+//  this is a new functions for social sharing
+function shareOnTwitter() {
+  const score = scoreEl.textContent;
+  const message = `I scored ${score} points on Prompt Trainer! 🚀 Try it here: ${window.location.href}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+  window.open(twitterUrl, '_blank', 'width=600,height=400');
+}
+
+function shareOnLinkedIn() {
+  const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+  window.open(linkedInUrl, '_blank', 'width=600,height=400');
+}
 // Enhanced prompt evaluation with challenge-specific criteria
 function simulateEvaluation(prompt, challenge) {
   let quality = 70; // Base score
@@ -206,7 +244,7 @@ function simulateEvaluation(prompt, challenge) {
 }
 
 // Generate simulated feedback based on quality
-function generateSimulatedFeedback(quality, prompt) {
+function generateSimulatedFeedback(quality, prompt, challenge, data) {
   let feedback = '';
   
   if (quality >= 90) {
@@ -243,6 +281,8 @@ function showFeedback(quality, prompt, challenge, data) {
   }
   
   feedbackBoxEl.style.display = 'block';
+  sharingButtonsEl.style.display = 'flex';
+}
 }
 
 // Update scoreboard
