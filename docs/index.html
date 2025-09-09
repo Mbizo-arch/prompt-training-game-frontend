@@ -35,7 +35,9 @@
 
     <div class="box">
       <textarea id="userInput" placeholder="Write your prompt here..."></textarea>
-      
+      <button id="copy-btn" style="margin-bottom: 15px; background: #a777e3; width: 100%;">
+  📋 Copy Prompt
+</button>
       <div class="loading" id="loading">
         <div class="loading-spinner"></div>
         <p>Analyzing your prompt with AI...</p>
@@ -55,6 +57,10 @@
       <strong>AI Feedback:</strong>
       <div id="aiFeedback"></div>
       <div id="examplePrompt" class="example-prompt" style="display: none;"></div>
+    <div class="sharing-buttons" style="margin-top: 15px; display: flex; gap: 10px; display: none;" id="sharing-buttons">
+      <button onclick="shareScore('twitter')" style="background: #1DA1F2;">🐦 Twitter</button>
+      <button onclick="shareScore('linkedin')" style="background: #0077B5;">💼 LinkedIn</button>
+     </div>
     </div>
     
     <!-- Accordion Tips Section -->
