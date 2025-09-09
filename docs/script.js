@@ -58,6 +58,7 @@ const loadingEl = document.getElementById('loading');
 const errorMessageEl = document.getElementById('error-message');
 const copyBtn = document.getElementById('copy-btn');
 const sharingButtonsEl = document.getElementById('sharing-buttons');
+
 // Initialize the game
 function initGame() {
   // Load saved game state if available
@@ -154,6 +155,7 @@ function nextChallenge() {
   feedbackBoxEl.style.display = 'none';
   examplePromptEl.style.display = 'none';
   errorMessageEl.style.display = 'none';
+  sharingButtonsEl.style.display = 'none';
   
   // Enable submit button and disable next button
   submitBtn.disabled = false;
@@ -169,7 +171,8 @@ function nextChallenge() {
   tipsOpenedThisChallenge = false;
   tipsSection.classList.remove('penalty-applied');
 }
-// this is a functions for copy functionality
+
+// Function for copy functionality
 function copyPromptToClipboard() {
   const promptText = userInputEl.value;
   if (!promptText) {
@@ -194,7 +197,7 @@ function copyPromptToClipboard() {
   });
 }
 
-//  this is a new functions for social sharing
+// Functions for social sharing
 function shareOnTwitter() {
   const score = scoreEl.textContent;
   const message = `I scored ${score} points on Prompt Trainer! 🚀 Try it here: ${window.location.href}`;
@@ -206,6 +209,7 @@ function shareOnLinkedIn() {
   const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
   window.open(linkedInUrl, '_blank', 'width=600,height=400');
 }
+
 // Enhanced prompt evaluation with challenge-specific criteria
 function simulateEvaluation(prompt, challenge) {
   let quality = 70; // Base score
@@ -244,7 +248,7 @@ function simulateEvaluation(prompt, challenge) {
 }
 
 // Generate simulated feedback based on quality
-function generateSimulatedFeedback(quality, prompt, challenge, data) {
+function generateSimulatedFeedback(quality, prompt) {
   let feedback = '';
   
   if (quality >= 90) {
@@ -282,7 +286,6 @@ function showFeedback(quality, prompt, challenge, data) {
   
   feedbackBoxEl.style.display = 'block';
   sharingButtonsEl.style.display = 'flex';
-}
 }
 
 // Update scoreboard
