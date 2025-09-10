@@ -76,9 +76,9 @@ function initGame() {
 
 // Submit prompt for evaluation
 async function submitPrompt() {
-  const prompt = userInputEl.value.trim();
+  const userResponse = userInputEl.value.trim();
   
-  if (!prompt) {
+  if (!userResponse) {
     alert('Please write a prompt before submitting.');
     return;
   }
@@ -96,14 +96,14 @@ async function submitPrompt() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        prompt: prompt, 
-        challenge: challengeTextEl.textContent 
+        prompt: challengeTextEl.textContent, 
+        userResponse: userResponse 
       })
     });
     
     if (response.ok) {
       const data = await response.json();
-      processEvaluationResult(data, prompt);
+      processEvaluationResult(data, userResponse);
     } else {
       throw new Error('Server returned an error');
     }
@@ -111,16 +111,16 @@ async function submitPrompt() {
     console.error('API Error:', error);
     // If API call fails, use simulated evaluation
     errorMessageEl.style.display = 'block';
-    const simulatedData = simulateEvaluation(prompt, challengeTextEl.textContent);
-    processEvaluationResult(simulatedData, prompt);
+    const simulatedData = simulateEvaluation(userResponse, challengeTextEl.textContent);
+    processEvaluationResult(simulatedData, userResponse);
   } finally {
     loadingEl.style.display = 'none';
   }
 }
 
 // Process the evaluation result from API or simulation
-function processEvaluationResult(data, prompt) {
-  const quality = data.score;
+function processEvaluationResult(data, userResponse) {
+  const quality = data.score || data.quality || 70; // Fallback to simulated score if needed
   
   // Update game state
   promptsCount++;
@@ -133,7 +133,7 @@ function processEvaluationResult(data, prompt) {
   
   // Update UI
   updateScoreboard();
-  showFeedback(quality, prompt, challengeTextEl.textContent, data);
+  showFeedback(quality, userResponse, challengeTextEl.textContent, data);
   
   // Enable next button
   nextBtn.disabled = false;
@@ -211,23 +211,23 @@ function shareOnLinkedIn() {
 }
 
 // Enhanced prompt evaluation with challenge-specific criteria
-function simulateEvaluation(prompt, challenge) {
+function simulateEvaluation(userResponse, challenge) {
   let quality = 70; // Base score
   
   // Evaluate based on general criteria
-  if (prompt.length > 100) quality += 10; // Longer prompts often better
-  if (prompt.length < 20) quality -= 15; // Too short
+  if (userResponse.length > 100) quality += 10; // Longer prompts often better
+  if (userResponse.length < 20) quality -= 15; // Too short
   
   // Check for specific elements that make good prompts
-  if (prompt.includes("please") || prompt.includes("could you")) quality += 5; // Politeness
-  if (prompt.includes("step by step") || prompt.includes("detailed")) quality += 10; // Specificity
-  if (prompt.includes("example") || prompt.includes("for instance")) quality += 8; // Examples
+  if (userResponse.includes("please") || userResponse.includes("could you")) quality += 5; // Politeness
+  if (userResponse.includes("step by step") || userResponse.includes("detailed")) quality += 10; // Specificity
+  if (userResponse.includes("example") || userResponse.includes("for instance")) quality += 8; // Examples
   
   // Challenge-specific evaluation
   const currentChallenge = challenges.find(c => c.text === challenge);
   if (currentChallenge) {
     currentChallenge.requirements.forEach(req => {
-      if (prompt.toLowerCase().includes(req.toLowerCase())) {
+      if (userResponse.toLowerCase().includes(req.toLowerCase())) {
         quality += 8; // Reward for addressing requirement
       } else {
         quality -= 5; // Penalty for missing requirement
@@ -240,7 +240,7 @@ function simulateEvaluation(prompt, challenge) {
   
   return {
     score: quality,
-    feedback: generateSimulatedFeedback(quality, prompt),
+    feedback: generateSimulatedFeedback(quality, userResponse),
     strengths: ["Good structure", "Clear intent"],
     weaknesses: ["Could be more specific", "Needs examples"],
     suggestions: "Try adding specific examples and constraints to your prompt."
@@ -248,7 +248,7 @@ function simulateEvaluation(prompt, challenge) {
 }
 
 // Generate simulated feedback based on quality
-function generateSimulatedFeedback(quality, prompt) {
+function generateSimulatedFeedback(quality, userResponse) {
   let feedback = '';
   
   if (quality >= 90) {
@@ -262,11 +262,11 @@ function generateSimulatedFeedback(quality, prompt) {
   }
   
   // Add specific suggestions
-  if (!prompt.includes("please") && !prompt.includes("thank")) {
+  if (!userResponse.includes("please") && !userResponse.includes("thank")) {
     feedback += " Try using polite language like 'please' for better results.";
   }
   
-  if (prompt.length < 50) {
+  if (userResponse.length < 50) {
     feedback += " Longer prompts with more details typically get better responses.";
   }
   
@@ -274,7 +274,7 @@ function generateSimulatedFeedback(quality, prompt) {
 }
 
 // Show feedback to user with example prompt
-function showFeedback(quality, prompt, challenge, data) {
+function showFeedback(quality, userResponse, challenge, data) {
   aiFeedbackEl.innerHTML = data.feedback || `Your prompt scored ${quality}%.`;
   
   // Show example prompt for lower scores
